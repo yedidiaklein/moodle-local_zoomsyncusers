@@ -1,6 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-// 
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Version details.
@@ -25,8 +25,13 @@
 
 namespace local_zoomsyncusers\task;
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Scheduled task to synchronize users with Zoom.
+ *
+ * @package    local_zoomsyncusers
+ * @category   task
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class sync_users extends \core\task\scheduled_task {
     /**
      * Returns the name of the task.
@@ -67,8 +72,8 @@ class sync_users extends \core\task\scheduled_task {
         // Loop through each user and create them in Zoom.
         foreach ($users as $user) {
             // Check if the user already exists in Zoom.
-            $zoom_user = zoom_get_user(zoom_get_api_identifier($user));
-            if ($zoom_user) {
+            $zoomuser = zoom_get_user(zoom_get_api_identifier($user));
+            if ($zoomuser) {
                 mtrace('User ' . $user->email . ' already exists in Zoom. Skipping.');
                 continue;
             } else {
@@ -83,6 +88,5 @@ class sync_users extends \core\task\scheduled_task {
             }
         }
         mtrace('Zoom Sync Users task completed.');
-        
     }
 }

@@ -1,6 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-// 
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Version details.
@@ -25,7 +25,7 @@
 
  defined('MOODLE_INTERNAL') || die();
 
- if ($hassiteconfig) {
+if ($hassiteconfig) {
     $settings = new admin_settingpage('local_zoomsyncusers_settings', new lang_string('pluginname', 'local_zoomsyncusers'));
 
     // Domain to sync.
@@ -44,7 +44,7 @@
         'autoCreate',
         [
             'autoCreate' => get_string('autoCreate', 'local_zoomsyncusers'),
-            'create' => get_string('create', 'local_zoomsyncusers')
+            'create' => get_string('create', 'local_zoomsyncusers'),
         ],
         PARAM_TEXT));
 
