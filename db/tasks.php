@@ -28,8 +28,8 @@ $tasks = [
     [
         'classname' => '\local_zoomsyncusers\task\sync_users',
         'blocking' => 0,
-        'minute' => '*/15', // Runs every 15 minutes
-        'hour' => '*',
+        'minute' => '0',
+        'hour' => '*', // Runs every hour.
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*',
