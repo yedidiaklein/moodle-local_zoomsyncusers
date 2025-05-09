@@ -45,6 +45,8 @@ if ($hassiteconfig) {
         [
             'autoCreate' => get_string('autoCreate', 'local_zoomsyncusers'),
             'create' => get_string('create', 'local_zoomsyncusers'),
+            'custCretae' => get_string('custCreate', 'local_zoomsyncusers'),
+            'ssoCreate' => get_string('ssoCreate', 'local_zoomsyncusers'),
         ],
         PARAM_TEXT));
 

@@ -34,6 +34,10 @@ $string['createtype'] = 'Create type';
 $string['createtypedesc'] = 'Choose the type of user creation.
 auto create will create users automatically without asking the user to approve,
 it will work if Zoom allow it on your account (probably enterprise account).
-create will create users and send them an approvement email.';
+create will create users and send them an approvement email.
+see <a href="https://developers.zoom.us/docs/api/users/#tag/users/POST/users">
+Zoom documentation</a> for more details.';
 $string['autoCreate'] = 'Auto Create';
 $string['create'] = 'Create';
+$string['custCreate'] = 'Custom Create';
+$string['ssoCreate'] = 'SSO Create';

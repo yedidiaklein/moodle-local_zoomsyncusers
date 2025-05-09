@@ -20,7 +20,7 @@ The `local_zoomsyncusers` plugin is a Moodle local plugin designed to synchroniz
 ## Requirements
 
 - Moodle 4.1 or higher.
-- mod_zoom intalled and patched as at https://github.com/yedidiaklein/moodle-mod_zoom.
+- mod_zoom intalled. (from here : [Github moodle-mod_zoom](https://github.com/ncstate-delta/moodle-mod_zoom))
 
 ## Configuration
 
