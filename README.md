@@ -26,7 +26,7 @@ The `local_zoomsyncusers` plugin is a Moodle local plugin designed to synchroniz
 
 1. Go to **Site Administration > Plugins > Local plugins > Zoom Sync Users**.
 2. Enter your domain, only users with email from this domain will be synces.
-3. Choose the way of creating users, autoCreate or create.
+3. Choose the way of creating users, autoCreate, createm, custom create or SSO create.
     1. Auto Create will create the users without their need to approve - it will only work if your zoom license allows it. (probably enterprise account)
     2. Create will send an approvement email to each created user.
 
