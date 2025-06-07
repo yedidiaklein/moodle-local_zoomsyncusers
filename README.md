@@ -6,8 +6,8 @@ The `local_zoomsyncusers` plugin is a Moodle local plugin designed to synchroniz
 
 ## Features
 
-- Synchronize Moodle users with Zoom accounts.
 - Automatically create Zoom users based on Moodle user data.
+- Synchronization can be based on either the user's email domain or their teacher role in courses.
 - Scheduled tasks for periodic synchronization.
 - Error logging for troubleshooting.
 
@@ -20,7 +20,7 @@ The `local_zoomsyncusers` plugin is a Moodle local plugin designed to synchroniz
 ## Requirements
 
 - Moodle 4.1 or higher.
-- mod_zoom intalled. (from here : [Github moodle-mod_zoom](https://github.com/ncstate-delta/moodle-mod_zoom))
+- mod_zoom intalled.
 
 ## Configuration
 
