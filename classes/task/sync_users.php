@@ -52,14 +52,28 @@ class sync_users extends \core\task\scheduled_task {
         // Get the domain from the plugin settings.
         $domain = get_config('local_zoomsyncusers', 'domain');
         $type = get_config('local_zoomsyncusers', 'createtype');
-        if (empty($domain)) {
-            mtrace('No domain configured for Zoom Sync Users. Task will not run.');
-            return;
+        if (empty($domain) || ($domain == "example.com")) {
+            // Check if teachers only is set.
+            $syncteachersonly = get_config('local_zoomsyncusers', 'syncteachersonly');
+            if ($syncteachersonly) {
+                // If teachers only, get all users that are teachers.
+                $users = $DB->get_records_sql('SELECT DISTINCT u.* FROM {user} u
+                    JOIN {role_assignments} ra ON ra.userid = u.id
+                    JOIN {context} c ON c.id = ra.contextid
+                    JOIN {role} r ON r.id = ra.roleid
+                    WHERE c.contextlevel = :contextlevel AND r.shortname = :rolename',
+                    ['contextlevel' => CONTEXT_COURSE, 'rolename' => 'editingteacher']);
+            } else {
+                // If no domain is set, nor teacher - do nothing.
+                mtrace('No domain specified, nor teachers.. Task will not run.');
+                return;
+            }
+        } else {
+            // Get all users with the specified domain.
+            $users = $DB->get_records_sql('SELECT * FROM {user} WHERE email LIKE ?', ['%' . $domain]);
         }
-        // Get all users with the specified domain.
-        $users = $DB->get_records_sql('SELECT * FROM {user} WHERE email LIKE ?', ['%' . $domain]);
         if (empty($users)) {
-            mtrace('No users found with the specified domain. Task will not run.');
+            mtrace('No users found. Task will not run.');
             return;
         }
         // Initialize Zoom API.

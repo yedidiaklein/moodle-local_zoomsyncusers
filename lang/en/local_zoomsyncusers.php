@@ -41,3 +41,5 @@ $string['autoCreate'] = 'Auto Create';
 $string['create'] = 'Create';
 $string['custCreate'] = 'Custom Create';
 $string['ssoCreate'] = 'SSO Create';
+$string['syncteachersonly'] = 'Sync teachers only (clear domain field for this option)';
+$string['syncteachersonlydesc'] = 'When enabled, only sync users who are enrolled as teachers in at least one course (you have to clear domain field to use this option).';

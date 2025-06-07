@@ -50,6 +50,13 @@ if ($hassiteconfig) {
         ],
         PARAM_TEXT));
 
+    // Sync only teachers checkbox.
+    $settings->add(new admin_setting_configcheckbox(
+        'local_zoomsyncusers/syncteachersonly',
+        get_string('syncteachersonly', 'local_zoomsyncusers'),
+        get_string('syncteachersonlydesc', 'local_zoomsyncusers'),
+        0
+    ));
 
     // Add the settings page to the local plugins section.
     $ADMIN->add('localplugins', $settings);
