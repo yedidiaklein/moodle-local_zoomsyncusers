@@ -1,0 +1,48 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Hebrew language strings.
+ *
+ * @package    local_zoomsyncusers
+ * @author     Yedidia Klein <yedidia@openapp.co.il>
+ * @copyright  Yedidia Klein
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+$string['pluginname'] = 'סנכרון משתמשי Zoom';
+$string['zoomsyncusers'] = 'סנכרון משתמשי Zoom';
+$string['domain'] = 'דומיין דוא"ל לסנכרון';
+$string['domaindesc'] = 'רק משתמשים עם כתובת דוא"ל מהדומיין הזה במודל ייווצרו ב-Zoom.';
+$string['syncusers'] = 'סנכרון משתמשי Zoom';
+$string['createtype'] = 'סוג יצירה';
+$string['createtypedesc'] = 'בחר את סוג יצירת המשתמש.
+יצירה אוטומטית תיצור משתמשים אוטומטית ללא לבקש מהמשתמש לאשר,
+זה יעבוד אם Zoom מאפשר זאת בחשבון שלך (כנראה חשבון ארגוני).
+יצירה תיצור משתמשים ותשלח להם דוא"ל אישור.
+ראה <a href="https://developers.zoom.us/docs/api/users/#tag/users/POST/users">
+תיעוד Zoom</a> לפרטים נוספים.';
+$string['autoCreate'] = 'יצירה אוטומטית';
+$string['create'] = 'יצירה';
+$string['custCreate'] = 'יצירה מותאמת';
+$string['ssoCreate'] = 'יצירת SSO';
+$string['syncroles'] = 'סנכרון משתמשים עם תפקידים נבחרים (נקה שדה דומיין עבור אפשרות זו)';
+$string['syncrolesdesc'] = 'כאשר תפקידים נבחרים, סנכרן רק משתמשים שיש להם אחד מהתפקידים הנבחרים לפחות בהקשר קורס אחד (עליך לנקות שדה דומיין כדי להשתמש באפשרות זו).';
+$string['dryrun'] = 'ניתוח הרצה יבשה';
+$string['dryrunshort'] = 'הרצה יבשה';
+$string['dryrunlink'] = 'צפה במה יסונכרן';
