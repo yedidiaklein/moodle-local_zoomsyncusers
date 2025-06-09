@@ -50,12 +50,31 @@ if ($hassiteconfig) {
         ],
         PARAM_TEXT));
 
-    // Sync only teachers checkbox.
-    $settings->add(new admin_setting_configcheckbox(
-        'local_zoomsyncusers/syncteachersonly',
-        get_string('syncteachersonly', 'local_zoomsyncusers'),
-        get_string('syncteachersonlydesc', 'local_zoomsyncusers'),
-        0
+    // Get system roles for multiselect.
+    $systemroles = get_all_roles();
+    $roleoptions = [];
+    foreach ($systemroles as $role) {
+        $roleoptions[$role->shortname] = $role->shortname;
+    }
+
+    // Sync selected system roles multiselect.
+    $settings->add(new admin_setting_configmultiselect(
+        'local_zoomsyncusers/syncroles',
+        get_string('syncroles', 'local_zoomsyncusers'),
+        get_string('syncrolesdesc', 'local_zoomsyncusers'),
+        [],
+        $roleoptions
+    ));
+
+    // Add a link to the dry run analysis.
+    $settings->add(new admin_setting_description(
+        'local_zoomsyncusers/dryrunlink',
+        get_string('dryrun', 'local_zoomsyncusers'),
+        html_writer::link(
+            new moodle_url('/local/zoomsyncusers/dryrun.php'),
+            get_string('dryrunlink', 'local_zoomsyncusers'),
+            ['target' => '_blank']
+        )
     ));
 
     // Add the settings page to the local plugins section.

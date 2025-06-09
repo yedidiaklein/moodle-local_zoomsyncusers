@@ -53,19 +53,27 @@ class sync_users extends \core\task\scheduled_task {
         $domain = get_config('local_zoomsyncusers', 'domain');
         $type = get_config('local_zoomsyncusers', 'createtype');
         if (empty($domain) || ($domain == "example.com")) {
-            // Check if teachers only is set.
-            $syncteachersonly = get_config('local_zoomsyncusers', 'syncteachersonly');
-            if ($syncteachersonly) {
-                // If teachers only, get all users that are teachers.
-                $users = $DB->get_records_sql('SELECT DISTINCT u.* FROM {user} u
-                    JOIN {role_assignments} ra ON ra.userid = u.id
-                    JOIN {context} c ON c.id = ra.contextid
-                    JOIN {role} r ON r.id = ra.roleid
-                    WHERE c.contextlevel = :contextlevel AND r.shortname = :rolename',
-                    ['contextlevel' => CONTEXT_COURSE, 'rolename' => 'editingteacher']);
+            // Check if roles are selected.
+            $syncroles = get_config('local_zoomsyncusers', 'syncroles');
+            if (!empty($syncroles)) {
+                // Parse the roles configuration.
+                $selectedroles = explode(',', $syncroles);
+                if (!empty($selectedroles)) {
+                    // Build the SQL to get users with any of the selected roles.
+                    list($rolesql, $roleparams) = $DB->get_in_or_equal($selectedroles, SQL_PARAMS_NAMED, 'role');
+                    $users = $DB->get_records_sql('SELECT DISTINCT u.* FROM {user} u
+                        JOIN {role_assignments} ra ON ra.userid = u.id
+                        JOIN {context} c ON c.id = ra.contextid
+                        JOIN {role} r ON r.id = ra.roleid
+                        WHERE c.contextlevel = :contextlevel AND r.shortname ' . $rolesql,
+                        array_merge(['contextlevel' => CONTEXT_COURSE], $roleparams));
+                } else {
+                    mtrace('No roles selected. Task will not run.');
+                    return;
+                }
             } else {
-                // If no domain is set, nor teacher - do nothing.
-                mtrace('No domain specified, nor teachers.. Task will not run.');
+                // If no domain or roles selected - do nothing.
+                mtrace('No domain specified, nor roles selected. Task will not run.');
                 return;
             }
         } else {
