@@ -45,11 +45,14 @@ $syncroles = get_config('local_zoomsyncusers', 'syncroles');
 
 echo $OUTPUT->box_start('generalbox');
 
-echo html_writer::tag('h3', 'Current Configuration:');
+echo html_writer::tag('h3', get_string('currentconfig', 'local_zoomsyncusers'));
 echo html_writer::start_tag('ul');
-echo html_writer::tag('li', 'Domain: ' . ($domain ?: 'Not set'));
-echo html_writer::tag('li', 'Create Type: ' . ($type ?: 'Not set'));
-echo html_writer::tag('li', 'Selected Roles: ' . ($syncroles ?: 'None selected'));
+echo html_writer::tag('li', get_string('domainlabel', 'local_zoomsyncusers') . ' ' .
+    ($domain ?: get_string('notset', 'local_zoomsyncusers')));
+echo html_writer::tag('li', get_string('createtypelabel', 'local_zoomsyncusers') . ' ' .
+    ($type ?: get_string('notset', 'local_zoomsyncusers')));
+echo html_writer::tag('li', get_string('selectedroleslabel', 'local_zoomsyncusers') . ' ' .
+    ($syncroles ?: get_string('noneselected', 'local_zoomsyncusers')));
 echo html_writer::end_tag('ul');
 
 echo $OUTPUT->box_end();
@@ -64,7 +67,7 @@ if (empty($domain) || ($domain == "example.com")) {
         // Parse the roles configuration.
         $selectedroles = explode(',', $syncroles);
         if (!empty($selectedroles)) {
-            $actiondescription = 'Sync users with selected roles: ' . implode(', ', $selectedroles);
+            $actiondescription = get_string('syncroleswith', 'local_zoomsyncusers', implode(', ', $selectedroles));
 
             // Build the SQL to get users with any of the selected roles.
             list($rolesql, $roleparams) = $DB->get_in_or_equal($selectedroles, SQL_PARAMS_NAMED, 'role');
@@ -76,41 +79,47 @@ if (empty($domain) || ($domain == "example.com")) {
                 ORDER BY u.lastname, u.firstname',
                 array_merge(['contextlevel' => CONTEXT_COURSE], $roleparams));
         } else {
-            $actiondescription = 'ERROR: No roles selected. Task would not run.';
+            $actiondescription = get_string('errornorolesselected', 'local_zoomsyncusers');
         }
     } else {
-        $actiondescription = 'ERROR: No domain specified, nor roles selected. Task would not run.';
+        $actiondescription = get_string('errornodomainorroles', 'local_zoomsyncusers');
     }
 } else {
-    $actiondescription = 'Sync all users with email domain: ' . $domain;
+    $actiondescription = get_string('syncdomainusers', 'local_zoomsyncusers', $domain);
     // Get all users with the specified domain.
     $users = $DB->get_records_sql('SELECT * FROM {user} WHERE email LIKE ? ORDER BY lastname, firstname',
         ['%' . $domain]);
 }
 
 echo $OUTPUT->box_start('generalbox');
-echo html_writer::tag('h3', 'Task Action:');
+echo html_writer::tag('h3', get_string('taskaction', 'local_zoomsyncusers'));
 echo html_writer::tag('p', $actiondescription);
 echo $OUTPUT->box_end();
 
 if (!empty($users)) {
     echo $OUTPUT->box_start('generalbox');
-    echo html_writer::tag('h3', 'Users that would be processed (' . count($users) . ' total):');
+    echo html_writer::tag('h3', get_string('userstoprocess', 'local_zoomsyncusers', count($users)));
 
     // Check Zoom API availability.
     $zoomavailable = false;
     try {
         $zoom = zoom_webservice();
         $zoomavailable = true;
-        echo html_writer::tag('p', '✓ Zoom API connection available', ['style' => 'color: green;']);
+        echo html_writer::tag('p', get_string('zoomapiavailable', 'local_zoomsyncusers'),
+            ['style' => 'color: green;']);
     } catch (moodle_exception $exception) {
-        echo html_writer::tag('p', '✗ Zoom API connection failed: ' . $exception->getMessage(),
+        echo html_writer::tag('p', get_string('zoomapifailed', 'local_zoomsyncusers', $exception->getMessage()),
             ['style' => 'color: red;']);
     }
 
     // Create table to show users.
     $table = new html_table();
-    $table->head = ['Name', 'Email', 'Status in Zoom', 'Action that would be taken'];
+    $table->head = [
+        get_string('tablename', 'local_zoomsyncusers'),
+        get_string('tableemail', 'local_zoomsyncusers'),
+        get_string('tablezoomstatus', 'local_zoomsyncusers'),
+        get_string('tableaction', 'local_zoomsyncusers'),
+    ];
     $table->attributes['class'] = 'generaltable';
 
     $createcount = 0;
@@ -124,31 +133,31 @@ if (!empty($users)) {
         $row->cells[] = $user->email;
 
         // Check if user exists in Zoom (if API is available).
-        $zoomstatus = 'Unknown';
-        $action = 'Unknown';
+        $zoomstatus = get_string('statusunknown', 'local_zoomsyncusers');
+        $action = get_string('statusunknown', 'local_zoomsyncusers');
 
         if ($zoomavailable) {
             try {
                 $zoomuser = zoom_get_user(zoom_get_api_identifier($user));
                 if ($zoomuser) {
-                    $zoomstatus = '✓ Exists';
-                    $action = 'Skip (already exists)';
+                    $zoomstatus = get_string('statusexists', 'local_zoomsyncusers');
+                    $action = get_string('actionskip', 'local_zoomsyncusers');
                     $skipcount++;
                     $row->attributes['style'] = 'background-color: #f0f8ff;';
                 } else {
-                    $zoomstatus = '✗ Does not exist';
-                    $action = 'Create user (type: ' . $type . ')';
+                    $zoomstatus = get_string('statusdoesnotexist', 'local_zoomsyncusers');
+                    $action = get_string('actioncreate', 'local_zoomsyncusers', $type);
                     $createcount++;
                     $row->attributes['style'] = 'background-color: #f0fff0;';
                 }
             } catch (Exception $e) {
-                $zoomstatus = 'Error checking: ' . $e->getMessage();
-                $action = 'Would attempt to create';
+                $zoomstatus = get_string('errorchecking', 'local_zoomsyncusers', $e->getMessage());
+                $action = get_string('actionwouldcreate', 'local_zoomsyncusers');
                 $createcount++;
                 $row->attributes['style'] = 'background-color: #fff8dc;';
             }
         } else {
-            $action = 'Would attempt to create (type: ' . $type . ')';
+            $action = get_string('actionwouldcreatetype', 'local_zoomsyncusers', $type);
             $createcount++;
         }
 
@@ -161,19 +170,19 @@ if (!empty($users)) {
     echo html_writer::table($table);
 
     echo $OUTPUT->box_start('generalbox');
-    echo html_writer::tag('h4', 'Summary:');
+    echo html_writer::tag('h4', get_string('summary', 'local_zoomsyncusers'));
     echo html_writer::start_tag('ul');
-    echo html_writer::tag('li', 'Users to be created: ' . $createcount);
-    echo html_writer::tag('li', 'Users to be skipped: ' . $skipcount);
-    echo html_writer::tag('li', 'Total users: ' . count($users));
+    echo html_writer::tag('li', get_string('userstocreate', 'local_zoomsyncusers', $createcount));
+    echo html_writer::tag('li', get_string('userstoskip', 'local_zoomsyncusers', $skipcount));
+    echo html_writer::tag('li', get_string('totalusers', 'local_zoomsyncusers', count($users)));
     echo html_writer::end_tag('ul');
     echo $OUTPUT->box_end();
 
     echo $OUTPUT->box_end();
 } else {
     echo $OUTPUT->box_start('generalbox');
-    echo html_writer::tag('h3', 'Result:');
-    echo html_writer::tag('p', 'No users found matching the criteria. Task would not process any users.');
+    echo html_writer::tag('h3', get_string('result', 'local_zoomsyncusers'));
+    echo html_writer::tag('p', get_string('nousers', 'local_zoomsyncusers'));
     echo $OUTPUT->box_end();
 }
 
@@ -182,7 +191,7 @@ echo $OUTPUT->box_start('generalbox');
 echo html_writer::tag('p',
     html_writer::link(
         new moodle_url('/admin/settings.php', ['section' => 'local_zoomsyncusers_settings']),
-        'Back to Zoom Sync Users Settings'
+        get_string('backtosettings', 'local_zoomsyncusers')
     )
 );
 echo $OUTPUT->box_end();
